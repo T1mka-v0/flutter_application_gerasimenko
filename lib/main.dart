@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import './transaction_manager.dart';
+import './transactions_add_page.dart';
+import './income_add_page.dart';
 
-void main() => runApp(FinanceTrackerApp());
+void main() => runApp(ChangeNotifierProvider(
+      create: (context) => TransactionsService(),
+      child: const FinanceTrackerApp(),
+    ));
 
 class FinanceTrackerApp extends StatelessWidget {
+  const FinanceTrackerApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,47 +23,20 @@ class FinanceTrackerApp extends StatelessWidget {
 }
 
 class TransactionPage extends StatefulWidget {
+  const TransactionPage({super.key});
+
   @override
-  _TransactionPageState createState() => _TransactionPageState();
+  TransactionPageState createState() => TransactionPageState();
 }
 
-class _TransactionPageState extends State<TransactionPage> {
-  final List<Transaction> _transactions = [];
-  final _amountController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  String _selectedCategory = 'Другое';
-  final List<String> _categories = ['Еда', 'Тарнспорт', 'Рестораны', 'Другое'];
-
-  void _addTransaction(String type) {
-    final amountText = _amountController.text;
-    final description = _descriptionController.text;
-
-    if (amountText.isEmpty || description.isEmpty) return;
-
-    final amount = double.tryParse(amountText);
-    if (amount == null) return;
-
-    setState(() {
-      _transactions.add(Transaction(
-        description: description,
-        amount: type == 'Expense' ? -amount : amount,
-        date: DateTime.now(),
-        category: _selectedCategory,
-      ));
-    });
-
-    _amountController.clear();
-    _descriptionController.clear();
-  }
-
-  double get _totalBalance =>
-      _transactions.fold(0.0, (sum, item) => sum - item.amount);
-
+class TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
+    final transactionsService = Provider.of<TransactionsService>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Трекер финансов'),
+        title: const Text('Трекер финансов'),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {},
@@ -65,26 +47,23 @@ class _TransactionPageState extends State<TransactionPage> {
           child: PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'Income') {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      child: Center(
-                        child: Text('Ghdbtn'),
-                      ),
-                    );
-                  },
-                );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TransactionsAddPage()));
               } else if (value == 'Expense') {
-                _addTransaction('Expense');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const IncomeAddPage()));
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'Income',
                 child: Text('Покупка'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'Expense',
                 child: Text('Доход'),
               ),
@@ -97,47 +76,19 @@ class _TransactionPageState extends State<TransactionPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Баланс: \$${_totalBalance.toStringAsFixed(2)}',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                TextField(
-                  controller: _amountController,
-                  decoration: InputDecoration(labelText: 'Amount'),
-                  keyboardType: TextInputType.number,
-                ),
-                DropdownButton<String>(
-                  value: _selectedCategory,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedCategory = newValue!;
-                    });
-                  },
-                  items: _categories.map((category) {
-                    return DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    _addTransaction('Expense');
-                  },
-                  child: Text('Add Transaction'),
-                ),
+                Text(
+                    'Баланс: \$${transactionsService.totalBalance.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
+          const Text('Последние действия:'),
           Expanded(
             child: ListView.builder(
-              itemCount: _transactions.length,
+              itemCount: transactionsService.transactions.length,
               itemBuilder: (context, index) {
-                final transaction = _transactions[index];
+                final transaction = transactionsService.transactions[index];
                 return ListTile(
                   title: Text(transaction.description),
                   subtitle: Text(
@@ -150,17 +101,4 @@ class _TransactionPageState extends State<TransactionPage> {
       ),
     );
   }
-}
-
-class Transaction {
-  final String description;
-  final double amount;
-  final DateTime date;
-  final String category;
-
-  Transaction(
-      {required this.description,
-      required this.amount,
-      required this.date,
-      required this.category});
 }
