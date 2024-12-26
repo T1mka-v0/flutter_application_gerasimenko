@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_gerasimenko/custom_text_field.dart';
 import './transaction_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +21,8 @@ class IncomeAddPageState extends State<IncomeAddPage> {
       appBar: AppBar(),
       body: Column(
         children: [
-          TextField(
-            controller: _amountController,
-            decoration: const InputDecoration(labelText: 'Сумма'),
-            keyboardType: TextInputType.number,
-          ),
+          customTextField(_amountController, 'Введите сумму...',
+              numerical: true),
           ElevatedButton(
               onPressed: () {
                 double? amount;

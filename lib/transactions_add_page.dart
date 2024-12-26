@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_gerasimenko/custom_text_field.dart';
 import './transaction_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -22,15 +23,9 @@ class TransactionsAddPageState extends State<TransactionsAddPage> {
       appBar: AppBar(),
       body: Column(
         children: [
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(labelText: 'Описание'),
-          ),
-          TextField(
-            controller: _amountController,
-            decoration: const InputDecoration(labelText: 'Сумма'),
-            keyboardType: TextInputType.number,
-          ),
+          customTextField(_descriptionController, 'Введите описание...'),
+          customTextField(_amountController, 'Введите сумму...',
+              numerical: true),
           DropdownButton<String>(
             value: _selectedCategory,
             onChanged: (newValue) {

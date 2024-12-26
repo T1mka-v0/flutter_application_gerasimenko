@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
+String capitalize(String str) {
+  if (str.isEmpty) return '';
+
+  return '${str[0].toUpperCase()}${str.substring(1).toLowerCase()}';
+}
+
+class CustomCategoryException implements Exception {
+  final String message;
+  CustomCategoryException(this.message);
+
+  @override
+  String toString() => message;
+}
+
 class Transaction {
   final String description;
   final double amount;
@@ -37,8 +51,14 @@ class TransactionsService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addCategory(String category) {
-    transactionCategories.add(category);
+  void addCategory(String newCategory) {
+    for (var category in transactionCategories) {
+      if (newCategory.toLowerCase() == category.toLowerCase()) {
+        throw CustomCategoryException(
+            'Категория "$newCategory" уже существует!');
+      }
+    }
+    transactionCategories.add(capitalize(newCategory));
     notifyListeners();
   }
 
