@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import './transaction_manager.dart';
 
-class ExpenseCard extends StatelessWidget {
-  final Expense expense;
+class IncomeCard extends StatelessWidget {
+  final Income income;
 
-  const ExpenseCard({super.key, required this.expense});
+  const IncomeCard({super.key, required this.income});
 
   @override
   Widget build(BuildContext context) {
@@ -17,32 +17,18 @@ class ExpenseCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              expense.category,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[800],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              expense.description,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${expense.date.day}.${expense.date.month}.${expense.date.year}',
+                  '${income.date.day}.${income.date.month}.${income.date.year}',
                 ),
                 Text(
-                  '\$${expense.amount.toStringAsFixed(2)}',
+                  '\$${income.amount.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.red[600],
+                    color: Colors.green[400],
                   ),
                 ),
               ],

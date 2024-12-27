@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_gerasimenko/income_card.dart';
 import 'package:flutter_application_gerasimenko/transaction_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +14,7 @@ class IncomesShowPage extends StatelessWidget {
           itemCount: transactionsService.incomes.length,
           itemBuilder: (context, index) {
             final income = transactionsService.incomes[index];
-            return ListTile(
-              title: Text(
-                  'Сумма: ${income.amount.toStringAsFixed(2)}\nДата операции: ${income.date.day}.${income.date.month}.${income.date.year}'),
-            );
+            return IncomeCard(income: income);
           },
         ),
       );

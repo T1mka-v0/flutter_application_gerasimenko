@@ -13,13 +13,13 @@ class ExpensesAddPage extends StatefulWidget {
 class ExpensesAddPageState extends State<ExpensesAddPage> {
   final _amountController = TextEditingController(text: '0');
   final _descriptionController = TextEditingController();
-  late String _selectedCategory;
+  String _selectedCategory = 'Другое';
 
   @override
   Widget build(BuildContext context) {
     final transactionsService = Provider.of<TransactionsService>(context);
     var categories = transactionsService.expensesCategories;
-    _selectedCategory = categories.isEmpty ? 'Другое' : categories[0];
+    // _selectedCategory = categories.isEmpty ? 'Другое' : categories[0];
 
     return Scaffold(
       appBar: AppBar(),
@@ -40,26 +40,18 @@ class ExpensesAddPageState extends State<ExpensesAddPage> {
             children: [
               const Text('Категория: '),
               DropdownButton<String>(
-                value: _selectedCategory,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedCategory = newValue!;
-                  });
-                },
-                items: categories.isNotEmpty
-                    ? categories.map((category) {
-                        return DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        );
-                      }).toList()
-                    : [
-                        const DropdownMenuItem(
-                          value: 'Другое',
-                          child: Text('Другое'),
-                        )
-                      ],
-              ),
+                  value: _selectedCategory,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedCategory = newValue!;
+                    });
+                  },
+                  items: categories.map((category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList()),
             ],
           ),
           ElevatedButton(

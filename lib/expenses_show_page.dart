@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_gerasimenko/transaction_manager.dart';
 import 'package:provider/provider.dart';
+import './expense_card.dart';
 
 class ExpensesShowPage extends StatelessWidget {
   const ExpensesShowPage({super.key});
@@ -13,11 +14,7 @@ class ExpensesShowPage extends StatelessWidget {
           itemCount: transactionsService.expenses.length,
           itemBuilder: (context, index) {
             final expense = transactionsService.expenses[index];
-            return ListTile(
-              title: Text(expense.description),
-              subtitle: Text(
-                  'Сумма: ${expense.amount.toStringAsFixed(2)}\nДата операции: ${expense.date.day}.${expense.date.month}.${expense.date.year}\nКатегория: ${expense.category}'),
-            );
+            return ExpenseCard(expense: expense);
           },
         ),
       );

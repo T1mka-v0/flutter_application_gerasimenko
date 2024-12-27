@@ -82,6 +82,9 @@ class TransactionsService extends ChangeNotifier {
   }
 
   void deleteCategory(String category) {
+    if (category == 'Другое') {
+      return;
+    }
     expensesCategories.remove(category);
     notifyListeners();
   }

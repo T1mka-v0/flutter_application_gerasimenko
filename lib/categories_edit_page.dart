@@ -44,8 +44,13 @@ class CategoriesEditPageState extends State<CategoriesEditPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(category),
+                      Text(
+                        category,
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                       ElevatedButton(
                           onPressed: () {
                             transactionsService.deleteCategory(category);

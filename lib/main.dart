@@ -105,7 +105,7 @@ class FinanceTrackerHomePageState extends State<FinanceTrackerHomePage> {
               child: const Icon(Icons.money),
               backgroundColor: const Color.fromARGB(255, 19, 168, 96),
               foregroundColor: Colors.white,
-              label: 'Получка',
+              label: 'Доход',
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
