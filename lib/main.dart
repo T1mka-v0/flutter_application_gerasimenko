@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_gerasimenko/expenses_add_page.dart';
-import 'package:flutter_application_gerasimenko/expenses_show_page.dart';
-import 'package:flutter_application_gerasimenko/income_add_page.dart';
-import 'package:flutter_application_gerasimenko/incomes_show_page.dart';
+import 'package:flutter_application_gerasimenko/presentation/expenses_add_page.dart';
+import 'package:flutter_application_gerasimenko/presentation/expenses_show_page.dart';
+import 'package:flutter_application_gerasimenko/presentation/income_add_page.dart';
+import 'package:flutter_application_gerasimenko/presentation/incomes_show_page.dart';
 import 'package:provider/provider.dart';
-import './transaction_manager.dart';
-import './categories_edit_page.dart';
+import 'data/transaction_manager.dart';
+import 'presentation/categories_edit_page.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() => runApp(ChangeNotifierProvider(
-      create: (context) => TransactionsService(),
-      child: const FinanceTrackerApp(),
-    ));
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TransactionsServiceAdapter());
+  Hive.registerAdapter(ExpenseAdapter());
+  Hive.registerAdapter(IncomeAdapter());
+
+  var box = await Hive.openBox<TransactionsService>('transactions');
+  var transactions = box.get('service') ?? TransactionsService();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => transactions,
+    child: const FinanceTrackerApp(),
+  ));
+}
 
 class FinanceTrackerApp extends StatelessWidget {
   const FinanceTrackerApp({super.key});
@@ -40,6 +51,13 @@ class FinanceTrackerHomePageState extends State<FinanceTrackerHomePage> {
   var isDialOpen = ValueNotifier<bool>(false);
 
   @override
+  void dispose() {
+    Hive.box('transactions').compact();
+    Hive.box('transactions').close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -60,11 +78,6 @@ class FinanceTrackerHomePageState extends State<FinanceTrackerHomePage> {
           onPress: () => setState(() {
             isDialOpen.value = !isDialOpen.value;
           }),
-          // animatedIcon: AnimatedIcons.menu_close,
-          // animatedIconTheme: IconThemeData(size: 22.0),
-          // / This is ignored if animatedIcon is non null
-          // child: Text("open"),
-          // activeChild: Text("close"),
           icon: Icons.add,
           activeIcon: Icons.close,
           spacing: 3,
@@ -73,19 +86,11 @@ class FinanceTrackerHomePageState extends State<FinanceTrackerHomePage> {
           childPadding: const EdgeInsets.all(5),
           spaceBetweenChildren: 4,
           label: null,
-
-          /// The active label of the main button, Defaults to label if not specified.
           activeLabel: null,
           renderOverlay: true,
-          // overlayColor: Colors.black,
-          // overlayOpacity: 0.5,
           useRotationAnimation: true,
           tooltip: 'Open Speed Dial',
           heroTag: 'speed-dial-hero-tag',
-          // foregroundColor: Colors.black,
-          // backgroundColor: Colors.white,
-          // activeForegroundColor: Colors.red,
-          // activeBackgroundColor: Colors.blue,
           elevation: 8.0,
           animationCurve: Curves.elasticInOut,
           isOpenOnStart: false,
@@ -127,7 +132,7 @@ class FinanceTrackerHomePageState extends State<FinanceTrackerHomePage> {
                   text: 'Покупки',
                 ),
                 Tab(
-                  text: 'Поступления',
+                  text: 'Доходы',
                 )
               ]),
             ),

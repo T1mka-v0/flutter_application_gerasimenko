@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import './transaction_manager.dart';
+import '../data/transaction_manager.dart';
 
 class IncomeCard extends StatelessWidget {
   final Income income;
+  final VoidCallback onDelete;
 
-  const IncomeCard({super.key, required this.income});
+  const IncomeCard({super.key, required this.income, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class IncomeCard extends StatelessWidget {
                     color: Colors.green[400],
                   ),
                 ),
+                IconButton(onPressed: onDelete, icon: const Icon(Icons.delete))
               ],
             ),
           ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_gerasimenko/custom_text_field.dart';
-import './transaction_manager.dart';
+import 'package:flutter_application_gerasimenko/presentation/custom_text_field.dart';
+import '../data/transaction_manager.dart';
 import 'package:provider/provider.dart';
 
 class IncomeAddPage extends StatefulWidget {

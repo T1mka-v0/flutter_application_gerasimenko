@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import './transaction_manager.dart';
+import '../data/transaction_manager.dart';
 
 class ExpenseCard extends StatelessWidget {
   final Expense expense;
+  final VoidCallback onDelete;
 
-  const ExpenseCard({super.key, required this.expense});
+  const ExpenseCard({super.key, required this.expense, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,7 @@ class ExpenseCard extends StatelessWidget {
                     color: Colors.red[600],
                   ),
                 ),
+                IconButton(onPressed: onDelete, icon: const Icon(Icons.delete))
               ],
             ),
           ],

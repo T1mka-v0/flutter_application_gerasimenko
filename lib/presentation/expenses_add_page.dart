@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_gerasimenko/custom_text_field.dart';
-import './transaction_manager.dart';
+import 'package:flutter_application_gerasimenko/presentation/custom_text_field.dart';
+import '../data/transaction_manager.dart';
 import 'package:provider/provider.dart';
 
 class ExpensesAddPage extends StatefulWidget {
@@ -19,7 +19,6 @@ class ExpensesAddPageState extends State<ExpensesAddPage> {
   Widget build(BuildContext context) {
     final transactionsService = Provider.of<TransactionsService>(context);
     var categories = transactionsService.expensesCategories;
-    // _selectedCategory = categories.isEmpty ? 'Другое' : categories[0];
 
     return Scaffold(
       appBar: AppBar(),

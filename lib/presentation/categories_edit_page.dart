@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_gerasimenko/transaction_manager.dart';
+import 'package:flutter_application_gerasimenko/data/transaction_manager.dart';
 import 'package:provider/provider.dart';
 import 'custom_text_field.dart';
 
@@ -48,7 +48,7 @@ class CategoriesEditPageState extends State<CategoriesEditPage> {
                     children: [
                       Text(
                         category,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       ElevatedButton(
@@ -65,25 +65,3 @@ class CategoriesEditPageState extends State<CategoriesEditPage> {
     );
   }
 }
-// class CategoriesEditPageState extends State<CategoriesEditPage> {
-  
-// }
-
-// List<String> items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(title: const Text('Draggable List')),
-  //     body: DragAndDropList<String>(
-  //       items,
-  //       itemBuilder: (context, item) => ListTile(title: Text(item)),
-  //       onDragFinish: (before, after) {
-  //         String data = items[before];
-  //         items.removeAt(before);
-  //         items.insert(after, data);
-  //       },
-  //       canBeDraggedTo: (one, two) => true,
-  //     ),
-  //   );
-  // }
