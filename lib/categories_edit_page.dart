@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_gerasimenko/transaction_manager.dart';
 import 'package:provider/provider.dart';
+import 'custom_text_field.dart';
 
 class CategoriesEditPage extends StatefulWidget {
   const CategoriesEditPage({super.key});
@@ -14,15 +15,15 @@ class CategoriesEditPageState extends State<CategoriesEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    final transactionsService = Provider.of<TransactionsService>(context);
+    var transactionsService = Provider.of<TransactionsService>(context);
     return Scaffold(
       appBar: AppBar(),
       body: Column(children: [
-        TextField(
-          controller: categoryFieldController,
-          decoration: const InputDecoration(labelText: 'Название категории'),
-        ),
-        TextButton.icon(
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            child: customTextField(
+                categoryFieldController, 'Введите название категории...')),
+        ElevatedButton(
             onPressed: () {
               try {
                 transactionsService.addCategory(categoryFieldController.text);
@@ -32,13 +33,27 @@ class CategoriesEditPageState extends State<CategoriesEditPage> {
                     .showSnackBar(SnackBar(content: Text(e.toString())));
               }
             },
-            label: const Text('Создать категорию')),
+            child: const Text('Добавить')),
         Expanded(
             child: ListView.builder(
-          itemCount: transactionsService.transactionCategories.length,
+          itemCount: transactionsService.expensesCategories.length,
           itemBuilder: (context, index) {
-            return ListTile(
-                title: Text(transactionsService.transactionCategories[index]));
+            var category = transactionsService.expensesCategories[index];
+            return Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Text(category),
+                      ElevatedButton(
+                          onPressed: () {
+                            transactionsService.deleteCategory(category);
+                          },
+                          child: const Text('Удалить'))
+                    ],
+                  ),
+                ));
           },
         ))
       ]),

@@ -21,8 +21,11 @@ class IncomeAddPageState extends State<IncomeAddPage> {
       appBar: AppBar(),
       body: Column(
         children: [
-          customTextField(_amountController, 'Введите сумму...',
-              numerical: true),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            child: customTextField(_amountController, 'Введите сумму...',
+                numerical: true),
+          ),
           ElevatedButton(
               onPressed: () {
                 double? amount;

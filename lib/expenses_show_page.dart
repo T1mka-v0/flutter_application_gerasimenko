@@ -10,12 +10,13 @@ class ExpensesShowPage extends StatelessWidget {
     return Consumer<TransactionsService>(builder: (_, transactionsService, __) {
       return Expanded(
         child: ListView.builder(
-          itemCount: transactionsService.incomes.length,
+          itemCount: transactionsService.expenses.length,
           itemBuilder: (context, index) {
-            final income = transactionsService.incomes[index];
+            final expense = transactionsService.expenses[index];
             return ListTile(
-              title: Text(
-                  'Сумма: ${income.amount.toStringAsFixed(2)}\nДата операции: ${income.date.day}.${income.date.month}.${income.date.year}'),
+              title: Text(expense.description),
+              subtitle: Text(
+                  'Сумма: ${expense.amount.toStringAsFixed(2)}\nДата операции: ${expense.date.day}.${expense.date.month}.${expense.date.year}\nКатегория: ${expense.category}'),
             );
           },
         ),
